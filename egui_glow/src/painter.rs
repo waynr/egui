@@ -265,7 +265,7 @@ impl Painter {
         );
 
         if !cfg!(target_arch = "wasm32") {
-            self.gl.enable(glow::FRAMEBUFFER_SRGB);
+            self.gl.disable(glow::FRAMEBUFFER_SRGB);
             check_for_gl_error!(&self.gl, "FRAMEBUFFER_SRGB");
         }
 
@@ -548,7 +548,7 @@ impl Painter {
                 };
                 (format, format)
             } else {
-                (glow::SRGB8_ALPHA8, glow::RGBA)
+                (glow::RGBA, glow::RGBA)
             };
 
             self.gl.pixel_store_i32(glow::UNPACK_ALIGNMENT, 1);
