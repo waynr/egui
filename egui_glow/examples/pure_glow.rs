@@ -3,6 +3,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 #![allow(unsafe_code)]
 
+use egui::{Color32, FontDefinitions, FontFamily, FontId, Response, Ui, Widget};
+use egui::text::Fonts;
+use egui::text::LayoutJob;
+use egui::text::TextFormat;
+
 fn main() {
     let mut clear_color = [0.1, 0.1, 0.1];
 
@@ -11,6 +16,8 @@ fn main() {
     let gl = std::rc::Rc::new(gl);
 
     let mut egui_glow = egui_glow::EguiGlow::new(gl_window.window(), gl.clone());
+    let font_definitions = FontDefinitions::default();
+    let fonts = Fonts::new(1.2, 1024, font_definitions);
 
     event_loop.run(move |event, _, control_flow| {
         let mut redraw = || {
@@ -23,6 +30,17 @@ fn main() {
                         quit = true;
                     }
                     ui.color_edit_button_rgb(&mut clear_color);
+                    let mut job = LayoutJob::single_section(
+                        String::from("meow"),
+                        TextFormat {
+                            font_id: FontId::new(52.0, FontFamily::Monospace),
+                            color: Color32::RED,
+                            ..Default::default()
+                        },
+                    );
+                    job.wrap_width = 100.0;
+                    let galley = fonts.layout_job(job);
+                    ui.label(galley);
                 });
             });
 
